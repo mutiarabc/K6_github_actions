@@ -23,23 +23,20 @@ export let options = {
     // iterations: 10 * VU,
     // discardResponseBodies: true,
     thresholds: {
-        RTT: ['p(99)<200', 'p(70)<150', 'avg<100', 'med<50', 'min<10'],
-        'Content OK': ['rate>0.95'],
-        ContentSize: ['value<200'],
-        Errors: ['count<100'],
+         http_req_duration: ['p(90) < 50', 'p(95) < 100', 'p(99.9) < 200'],
 
         },
     stages: [
-    { duration: "30s", target:  Math.round(VU/4) },
-    { duration: "30s", target:  Math.round(VU/4) },
-    { duration: "30s", target: Math.round(VU/2) },
-    { duration: "30s", target: Math.round(VU/2) },
-     { duration: "30s", target: VU },
-     { duration: "30s", target: Math.round(VU/2) },
-     { duration: "30s", target: Math.round(VU/2) },
-     { duration: "30s", target: Math.round(VU/4) },
-     { duration: "30s", target: Math.round(VU/4) },
-        { duration: "30s", target: 0 },
+    { duration: "3s", target:  Math.round(VU/4) },
+    { duration: "3s", target:  Math.round(VU/4) },
+    { duration: "3s", target: Math.round(VU/2) },
+    { duration: "3s", target: Math.round(VU/2) },
+     { duration: "3s", target: VU },
+     { duration: "3s", target: Math.round(VU/2) },
+     { duration: "3s", target: Math.round(VU/2) },
+     { duration: "3s", target: Math.round(VU/4) },
+     { duration: "3s", target: Math.round(VU/4) },
+        { duration: "3s", target: 0 },
     ]
 };
 
