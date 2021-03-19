@@ -1,10 +1,10 @@
 import http from "k6/http";
-import { sleep } from "k6";
+//import { sleep } from "k6";
 import { Counter, Rate } from "k6/metrics";
 import encoding from "k6/encoding";
 import { group } from 'k6';
 
-const VU = 10;
+const VU = 4;
 const MAX_BATCH_PER_HOST = 5;
 
 let errorRate = new Rate("errors");
@@ -22,6 +22,13 @@ export let options = {
     // vus: VU,
     // iterations: 10 * VU,
     // discardResponseBodies: true,
+    thresholds: {
+        RTT: ['p(99)<200', 'p(70)<150', 'avg<100', 'med<50', 'min<10'],
+        'Content OK': ['rate>0.95'],
+        ContentSize: ['value<200'],
+        Errors: ['count<100'],
+
+        },
     stages: [
     { duration: "30s", target:  Math.round(VU/4) },
     { duration: "30s", target:  Math.round(VU/4) },
@@ -56,14 +63,15 @@ export default function (data) {
             timeout: 5000,
         };
 
-        let res = http.request('GET', `${data.BASE_URL}public/crocodiles/`, null, params);
+        let res = http.request('GET', `${data.BASE_URL}public/crocodiles/`, null, params,{
+            tags: { type: 'API' },
+        });
 
          if (res.status === 200) {
-        
-            
              successCounter.add(1)
              errorRate.add(0)
          }
+
          else {
              errorRate.add(1)
              console.log("error token:", res.status, "error code:", res.error_code, "-", res.error);
@@ -85,11 +93,11 @@ export default function (data) {
          }
         //  let token = res.json('data.access_token');
         //     //console.log("prduct id ", product_id);
-            let res1 = http.request('GET', `${data.BASE_URL}public/crocodiles/1/`, null, params);
+            let res1 = http.request('GET', `${data.BASE_URL}public/crocodiles/1/`, null, params,{
+                tags: { type: 'API' },
+            });
 
             if (res1.status === 200) {
-           
-               
                 successCounter.add(1)
                 errorRate.add(0)
             }
