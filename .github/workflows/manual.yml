@@ -7,6 +7,12 @@ on:
         default: v1.0.0
         required: true
 jobs:
+  printInputs:
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo "Log level: ${{ github.event.inputs.logLevel }}"
+        echo "Tags: ${{ github.event.inputs.tags }}"
   k6_local_test:
     name: k6 local test run - basic example
     runs-on: ubuntu-latest
