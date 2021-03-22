@@ -4,8 +4,6 @@ on:
     inputs:
       testscript:
         description: 'Script yang ditest'
-        default: v1.0.0, 
-        required: true
       scriptname:
         description: 'Nama Script'     
         required: true
