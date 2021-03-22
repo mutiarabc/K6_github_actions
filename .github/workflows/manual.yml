@@ -1,6 +1,11 @@
-
-on: [push]
-
+name: Manual Inputs
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: K6_lama
+        default: v1.0.0
+        required: true
 jobs:
   k6_local_test:
     name: k6 local test run - basic example
