@@ -2,19 +2,16 @@ name: Manual Inputs
 on: 
   workflow_dispatch:
     inputs:
-      testscript:
-        description: 'Script yang ditest'
       scriptname:
         description: 'Nama Script'     
         required: true
-        default: '**.js'
+        default: '*.js'
 
 jobs:
   printInputs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        echo "Test Script: ${{ github.event.inputs.testscript }}"
         echo "Script Name: ${{ github.event.inputs.scriptname }}"
 
   k6_local_test:
