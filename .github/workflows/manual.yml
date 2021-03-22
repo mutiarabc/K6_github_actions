@@ -2,27 +2,23 @@ name: Manual Inputs
 on: 
   workflow_dispatch:
     inputs:
-      deployEnvironment:
-        description: 'Deployment Environment'     
-        required: true
-        default: 'dev'
-      logLevel:
-        description: 'The Logging Level'  
-        required: false
-        default: 'low'
-      version:
-        description: K6_lama
+      testscript:
+        description: 'Script yang ditest'
         default: v1.0.0, 
         required: true
+      scriptname:
+        description: 'Nama Script'     
+        required: true
+        default: '**.js'
 
 jobs:
   printInputs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        echo "Deploy Environment: ${{ github.event.inputs.deployEnvironment }}"
-        echo "Log Level: ${{ github.event.inputs.logLevel }}"
-        
+        echo "Test Script: ${{ github.event.inputs.testscript }}"
+        echo "Script Name: ${{ github.event.inputs.scriptname }}"
+
   k6_local_test:
     name: k6 local test run - basic example
     runs-on: ubuntu-latest
@@ -33,6 +29,7 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Run local k6 test with docker
+
         uses: k6io/action@v0.1
         with:
-            filename : k6_scriptt.js
+            filename : ${{ github.event.inputs.scriptname }}"
