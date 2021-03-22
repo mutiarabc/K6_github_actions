@@ -4,8 +4,11 @@ on:
     inputs:
       version:
         description: K6_lama
-        default: v1.0.0
+        default: v1.0.0, 
         required: true
+  repository_dispatch:
+    types: do-something
+    
 jobs:
   printInputs:
     runs-on: ubuntu-latest
