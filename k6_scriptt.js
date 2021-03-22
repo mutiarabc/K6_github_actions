@@ -22,12 +22,10 @@ export let options = {
     // vus: VU,
     // iterations: 10 * VU,
     // discardResponseBodies: true,
-    thresholds: {
+    //thresholds: {
         // http_req_duration: ['p(90) < 50', 'p(95) < 100', 'p(99.9) < 200'],
-        http_req_failed: ['rate<0.01'],   // http errors should be less than 1% 
-        //http_req_duration: ['p(95)<500'], // 95% of requests should be below 200ms
-
-        },
+        //http_req_failed: ['rate<0.01'],   // http errors should be less than 1% 
+        //http_req_duration: ['p(95)<500'], // 95% of requests should be below 200m
     stages: [
     { duration: "3s", target:  Math.round(VU/4) },
     { duration: "3s", target:  Math.round(VU/4) },
