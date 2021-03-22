@@ -1,33 +1,42 @@
-name: Manual Inputs
 on:
-  push: {branches: main}
-  pull_request: {branches: main}
-#   workflow_dispatch:
-#     inputs:
-#       version:
-#         description: K6_lama
-#         default: v1.0.0, 
-#         required: true
-#   repository_dispatch:
-#     types: do-something
-    
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Which environment to deploy to [dev|qa|prod].'
+        default: dev
+        required: true
+      git_reference:
+        description: 'Which Git reference to check out. Examples: "refs/tags/v0.2.1", "refs/heads/website/feature_branch" "refs/heads/master".'
+        default: refs/tags/vX.Y.Z
+        required: true
+  push:
+    paths:
+      - 'my-project-subdirectory/**'
+    branches:
+      - master
+
 jobs:
-#   printInputs:
-#     runs-on: ubuntu-latest
-#     steps:
-#     - run: |
-#         echo "Log level: ${{ github.event.inputs.logLevel }}"
-#         echo "Tags: ${{ github.event.inputs.tags }}"
-  k6_local_test:
-    name: k6 local test run - basic example
-    runs-on: ubuntu-latest
-    container: docker://loadimpact/k6:latest
+  deploy:
+    name: Deploy my project
+
+    runs-on:
+      - ubuntu-20.04
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
+      - name: Set variables
+        env:
+          DEFAULT_ENVIRONMENT: dev
+          DEFAULT_GIT_REFERENCE: refs/heads/master
+        run: |
+          echo "GIT_REFERENCE=${{ github.event.inputs.git_reference || env.DEFAULT_GIT_REFERENCE }}" >> $GITHUB_ENV
+          echo "ENVIRONMENT=${{ github.event.inputs.environment || env.DEFAULT_ENVIRONMENT }}" >> $GITHUB_ENV
 
-      - name: Run local k6 test with docker
-        uses: k6io/action@v0.1
+      - name: Checkout repository at ${{ env.GIT_REFERENCE }}
+        uses: actions/checkout@v2
         with:
-            filename : k6_scriptt.js
+          ref: ${{ env.GIT_REFERENCE }}
+          fetch-depth: 0
+
+      - name: Build and deploy to ${{ env.ENVIRONMENT }}
+
+
