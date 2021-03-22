@@ -1,21 +1,23 @@
 name: Manual Inputs
-on: 
-  workflow_dispatch:
-    inputs:
-      version:
-        description: K6_lama
-        default: v1.0.0, 
-        required: true
-  repository_dispatch:
-    types: do-something
+on:
+  push: {branches: main}
+  pull_request: {branches: main}
+#   workflow_dispatch:
+#     inputs:
+#       version:
+#         description: K6_lama
+#         default: v1.0.0, 
+#         required: true
+#   repository_dispatch:
+#     types: do-something
     
 jobs:
-  printInputs:
-    runs-on: ubuntu-latest
-    steps:
-    - run: |
-        echo "Log level: ${{ github.event.inputs.logLevel }}"
-        echo "Tags: ${{ github.event.inputs.tags }}"
+#   printInputs:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - run: |
+#         echo "Log level: ${{ github.event.inputs.logLevel }}"
+#         echo "Tags: ${{ github.event.inputs.tags }}"
   k6_local_test:
     name: k6 local test run - basic example
     runs-on: ubuntu-latest
