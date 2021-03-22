@@ -1,42 +1,45 @@
-on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Which environment to deploy to [dev|qa|prod].'
-        default: dev
-        required: true
-      git_reference:
-        description: 'Which Git reference to check out. Examples: "refs/tags/v0.2.1", "refs/heads/website/feature_branch" "refs/heads/master".'
-        default: refs/tags/vX.Y.Z
-        required: true
-  push:
-    paths:
-      - 'my-project-subdirectory/**'
-    branches:
-      - master
 
-jobs:
-  deploy:
-    name: Deploy my project
-
-    runs-on:
-      - ubuntu-20.04
-
-    steps:
-      - name: Set variables
-        env:
-          DEFAULT_ENVIRONMENT: dev
-          DEFAULT_GIT_REFERENCE: refs/heads/master
-        run: |
-          echo "GIT_REFERENCE=${{ github.event.inputs.git_reference || env.DEFAULT_GIT_REFERENCE }}" >> $GITHUB_ENV
-          echo "ENVIRONMENT=${{ github.event.inputs.environment || env.DEFAULT_ENVIRONMENT }}" >> $GITHUB_ENV
-
-      - name: Checkout repository at ${{ env.GIT_REFERENCE }}
-        uses: actions/checkout@v2
-        with:
           ref: ${{ env.GIT_REFERENCE }}
           fetch-depth: 0
 
       - name: Build and deploy to ${{ env.ENVIRONMENT }}
 
 
+name: Manual Inputs
+on: 
+  workflow_dispatch:
+    inputs:
+      deployEnvironment:
+        description: 'Deployment Environment'     
+        required: true
+        default: 'dev'
+      logLevel:
+        description: 'The Logging Level'  
+        required: false
+        default: 'low'
+      version:
+        description: K6_lama
+        default: v1.0.0, 
+        required: true
+
+jobs:
+  printInputs:
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo "Deploy Environment: ${{ github.event.inputs.deployEnvironment }}"
+        echo "Log Level: ${{ github.event.inputs.logLevel }}"
+        
+  k6_local_test:
+    name: k6 local test run - basic example
+    runs-on: ubuntu-latest
+    container: docker://loadimpact/k6:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Run local k6 test with docker
+        uses: k6io/action@v0.1
+        with:
+            filename : k6_scriptt.js
