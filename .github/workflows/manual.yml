@@ -1,19 +1,18 @@
 name: Self service performance test
 on: 
-  workflow_dispatch:
-    inputs:
-      scriptname:
-        description: 'Nama Script'     
-        required: true
-        default: '*.js'
+  push:
+    branches: [master]
+  pull_request: 
+    branches: [master]
+    
+#   workflow_dispatch:
+#     inputs:
+#       scriptname:
+#         description: 'Nama Script'     
+#         required: true
+#         default: '*.js'
 
 jobs:
-  printInputs:
-    runs-on: ubuntu-latest
-    steps:
-    - run: |
-        echo "Script Name: ${{ github.event.inputs.scriptname }}"
-
   k6_local_test:
     name: k6 local test run - basic example
     runs-on: ubuntu-latest
@@ -26,4 +25,4 @@ jobs:
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
         with:
-            filename : ${{ github.event.inputs.scriptname }}
+            filename : k6_scriptt.js
