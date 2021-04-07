@@ -1,26 +1,32 @@
 name: Self service performance test
 on: 
-  push:
-    branches: [master]
-  pull_request: 
-    branches: [master]
     
-#   workflow_dispatch:
-#     inputs:
-#       scriptname:
-#         description: 'Nama Script'     
-#         required: true
-#         default: '*.js'
+  workflow_dispatch:
+    inputs:
+      scriptname:
+        description: 'Nama Script'     
+        required: true
+        default: '$name'
+      vus:
+        description: 'VUS'
+        required: true
+        default: '$vus'
+      stages:
+        description: 'Configuration'
+        required: true
+        default: '$stages'
+        
+        
 
 jobs:
-  k6_local_test:
-    name: k6 local test run - basic example
+ change-and-run:
     runs-on: ubuntu-latest
     container: docker://loadimpact/k6:latest
-
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+        
 
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
