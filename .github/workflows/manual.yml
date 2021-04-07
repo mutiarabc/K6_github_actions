@@ -6,15 +6,15 @@ on:
       scriptname:
         description: 'Nama Script'     
         required: true
-        default: '$name'
+        default: '*.js'
       vus:
         description: 'VUS'
         required: true
-        default: '$vus'
+        default: '1'
       stages:
-        description: 'Configuration'
+        description: 'Timeout'
         required: true
-        default: '$stages'
+        default: '5000'
         
         
 
@@ -26,9 +26,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      
+      - name: Change VUs
+        run: sed "s/BASIC_VUS / ${{ github.event.inputs.VUS }}/" ${{ github.event.inputs.scriptname }} 
         
-
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
         with:
-            filename : k6_scriptt.js
+            filename : ${{ github.event.inputs.scriptname }}
