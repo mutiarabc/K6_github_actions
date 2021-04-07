@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v1
       
       - name: Change VUs
-        run: sed "s/BASIC_VUS / ${{ github.event.inputs.VUS }}/" ${{ github.event.inputs.scriptname }} 
+        run: sed "s/${GITHUB_REF}/${{ github.event.inputs.VUS }}/" ${{ github.event.inputs.scriptname }} 
         
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
