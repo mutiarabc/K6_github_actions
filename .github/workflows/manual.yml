@@ -29,10 +29,8 @@ jobs:
 #         uses: finnp/create-file-action@1.0.0
       - name: Change VUs
         run: | 
-           sed 's/VU = 4/${{github.event.inputs.vus}}/g' ${{github.event.inputs.scriptname}} > ${FILE_NAME}
-           sed 's/timeout: 5000/timeout: ${{github.event.inputs.stages}}/g' ${FILE_NAME} > ${{github.event.inputs.scriptname}}
-            
+           sed 's/VU = 4/${{github.event.inputs.vus}}/g', sed 's/timeout: 5000/{{github.event.inputs.stages}}/g' ${{github.event.inputs.scriptname}} > ${FILE_NAME}            
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
         with:
-            filename : ${{github.event.inputs.scriptname}}
+            filename : {FILE_NAME}
