@@ -26,8 +26,7 @@ jobs:
       
       - name: Change VUs
         run: | 
-            git show ref
-            sed 's/4/1/' 'refs/heads/k6/k6_scriptt.js'
+            sed 's/4/1/' '${{github.repository}}/k6/k6_scriptt.js'
             
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
