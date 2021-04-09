@@ -36,4 +36,4 @@ jobs:
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
         with:
-            filename : ${{ github.event.inputs.scriptname+1 }}
+            filename : ${{ github.event.inputs.scriptname }}
