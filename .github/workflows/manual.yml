@@ -31,9 +31,9 @@ jobs:
       - name: Change VUs
         run: | 
             echo $GITHUB_REF
-            sed 's/$GITHUB_REF.BASIC_VUS/${{ github.event.inputs.VUS }}/' ${{ github.event.inputs.scriptname }}
+            sed 's/$GITHUB_REF.BASIC_VUS/1/'k6_scriptt.js > k6_scriptt1.js
             ls -al 
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
         with:
-            filename : ${{ github.event.inputs.scriptname }}
+            filename : k6_scriptt1.js
