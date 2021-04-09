@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://loadimpact/k6:latest
     env:
-        FILE_NAME: "dir/fileName.js"
+        FILE_NAME: "./file.js"
         FILE_DATA: "file content"
     
     steps:
