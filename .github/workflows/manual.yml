@@ -19,8 +19,8 @@ jobs:
  change-and-run:
     runs-on: ubuntu-latest
 #     container: docker://loadimpact/k6:latest
-    env:
-        FILE_NAME: k6_script.js
+#     env:
+#         FILE_NAME: k6_script.js
     
     steps:
       - name: Checkout
@@ -29,8 +29,8 @@ jobs:
 #         uses: finnp/create-file-action@1.0.0
       - name: Change VUs
         run: | 
-           sed -i -e 's/VU = 4/${{github.event.inputs.vus}}/g' -e 's/timeout: 5000/timeout: ${{github.event.inputs.stages}}/g' ${{github.event.inputs.scriptname}} > ${FILE_NAME}            
+           sed -i -e 's/VU = 4/${{github.event.inputs.vus}}/g' -e 's/timeout: 5000/timeout: ${{github.event.inputs.stages}}/g' ${{github.event.inputs.scriptname}}         
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
         with:
-            filename : ${FILE_NAME}
+            filename : ${{github.event.inputs.scriptname}} 
