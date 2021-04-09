@@ -26,6 +26,7 @@ jobs:
       
       - name: Change VUs
         run: | 
+            pwd
             ls -la
             sed 's/4/1/' ${{github.repository}}/k6/k6_scriptt.js
             
