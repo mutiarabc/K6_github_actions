@@ -1,6 +1,5 @@
 name: Self service performance test
 on: 
-    
   workflow_dispatch:
     inputs:
       scriptname:
@@ -15,8 +14,6 @@ on:
         description: 'Timeout'
         required: true
         default: '5000'
-        
-        
 
 jobs:
  change-and-run:
@@ -29,7 +26,7 @@ jobs:
       
       - name: Change VUs
         run: | 
-            sed 's/4/1/' ${{github.repository}}/blob/main/k6_scriptt.js
+            sed 's/4/1/' ${{github.repository}}/**/k6_scriptt.js
             
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
