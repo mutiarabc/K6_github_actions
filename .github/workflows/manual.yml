@@ -18,15 +18,11 @@ on:
 jobs:
  change-and-run:
     runs-on: ubuntu-latest
-#     container: docker://loadimpact/k6:latest
-#     env:
-#         FILE_NAME: k6_script.js
     
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-#       - name: Create File
-#         uses: finnp/create-file-action@1.0.0
+
       - name: Change VUs
         run: | 
            sed -i -e 's/VU = 4/VU = ${{github.event.inputs.vus}}/g' -e 's/timeout: 5000/timeout: ${{github.event.inputs.stages}}/g' ${{github.event.inputs.scriptname}}     
