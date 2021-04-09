@@ -20,7 +20,7 @@ on:
 
 jobs:
  change-and-run:
-    if: ${{ github.ref == '${{ github.event.inputs.scriptname }} ' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     container: docker://loadimpact/k6:latest
     
@@ -30,7 +30,7 @@ jobs:
       
       - name: Change VUs
         run: | 
-            echo ${{ GITHUB_REF }}
+            echo $GITHUB_REF
             sed "s/$GITHUB_REF.BASIC_VUS/${{ github.event.inputs.VUS }}/" ${{ github.event.inputs.scriptname }} 
         
       - name: Run local k6 test with docker
