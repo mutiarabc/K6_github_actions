@@ -30,16 +30,16 @@ export let options = {
 
 //         },
     stages: [
-    { duration: "30s", target:  Math.round(VU/4) },
-    { duration: "30s", target:  Math.round(VU/4) },
-    { duration: "30s", target: Math.round(VU/2) },
-    { duration: "30s", target: Math.round(VU/2) },
-     { duration: "30s", target: VU },
-     { duration: "30s", target: Math.round(VU/2) },
-     { duration: "30s", target: Math.round(VU/2) },
-     { duration: "30s", target: Math.round(VU/4) },
-     { duration: "30s", target: Math.round(VU/4) },
-        { duration: "30s", target: 0 },
+    { duration: "1s", target:  Math.round(VU/4) },
+    { duration: "1s", target:  Math.round(VU/4) },
+    { duration: "1s", target: Math.round(VU/2) },
+    { duration: "1s", target: Math.round(VU/2) },
+    { duration: "1s", target: VU },
+    { duration: "1s", target: Math.round(VU/2) },
+    { duration: "1s", target: Math.round(VU/2) },
+    { duration: "1s", target: Math.round(VU/4) },
+    { duration: "1s", target: Math.round(VU/4) },
+    { duration: "1s", target: 0 },
     ]
 };
 
