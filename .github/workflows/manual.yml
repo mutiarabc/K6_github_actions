@@ -19,14 +19,17 @@ jobs:
  change-and-run:
     runs-on: ubuntu-latest
     container: docker://loadimpact/k6:latest
+    env:
+      paths: /k6/
     
     steps:
       - name: Checkout
         uses: actions/checkout@v1
       
       - name: Change VUs
+        if: ${{ env.paths == 'k6' }}
         run: | 
-            sed 's/4/1/' ${{GITHUB_EVENT_PATH}}/k6/k6_scriptt.js
+            sed 's/4/1/' $paths/k6_scriptt.js
             
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
