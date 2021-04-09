@@ -6,7 +6,7 @@ on:
       scriptname:
         description: 'Nama Script'     
         required: true
-        default: '.js'
+        default: ''
       vus:
         description: 'VUS'
         required: true
@@ -20,7 +20,6 @@ on:
 
 jobs:
  change-and-run:
-    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     container: docker://loadimpact/k6:latest
     
@@ -30,8 +29,7 @@ jobs:
       
       - name: Change VUs
         run: | 
-            echo $GITHUB_REF
-            sudo sed 's/$GITHUB_REF.4/1/' $/GITHUB_REF/k6_scriptt.js > k6_scriptt1.js
+            sudo sed 's/4/1/' ${{github.repository}}/k6_scriptt.js > k6_scriptt1.js
             
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
