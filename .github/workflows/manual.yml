@@ -29,7 +29,7 @@ jobs:
       
       - name: Change VUs
         run: | 
-            sudo sed 's/4/1/' ${{github.repository}}/k6_scriptt.js > k6_scriptt1.js
+            sudo sed 's/4/1/' ${{github.repository}}/k6_scriptt.js
             
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
