@@ -6,7 +6,7 @@ on:
       scriptname:
         description: 'Nama Script'     
         required: true
-        default: ''
+        default: '.js'
       vus:
         description: 'VUS'
         required: true
@@ -31,8 +31,7 @@ jobs:
       - name: Change VUs
         run: | 
             echo $GITHUB_REF
-            sed 's/$GITHUB_REF.BASIC_VUS/${{ github.event.inputs.VUS }}/' ${{ github.event.inputs.scriptname }}
-            mv ${{ github.event.inputs.scriptname }} > ${{ github.event.inputs.scriptname+1 }}
+            sed 's/$GITHUB_REF.BASIC_VUS/${{ github.event.inputs.VUS }}/' ${{ github.event.inputs.scriptname }} > ${{ github.event.inputs.scriptname }}
         
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
