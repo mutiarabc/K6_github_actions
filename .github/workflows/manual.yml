@@ -25,11 +25,10 @@ jobs:
         uses: actions/checkout@v1
       
       - name: Change VUs
-        if: ${{ env.paths == 'k6' }}
         run: | 
-            sed 's/4/1/' k6_scriptt.js
+            sed 's/4/1/g' k6_scriptt.js 
             
-      - name: Run local k6 test with docker
-        uses: k6io/action@v0.1
-        with:
-            filename : k6_scriptt.js
+#       - name: Run local k6 test with docker
+#         uses: k6io/action@v0.1
+#         with:
+#             filename : k6_scriptt.js
