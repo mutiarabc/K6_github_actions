@@ -26,7 +26,7 @@ jobs:
       
       - name: Change VUs
         run: | 
-           sed 's/4/1/g' ${{github.events.inputs.scriptname}}
+           sed 's/4/1/g' ${{github.event.inputs.scriptname}}
             
 #       - name: Run local k6 test with docker
 #         uses: k6io/action@v0.1
