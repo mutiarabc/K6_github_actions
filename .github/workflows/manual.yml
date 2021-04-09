@@ -29,7 +29,7 @@ jobs:
 #         uses: finnp/create-file-action@1.0.0
       - name: Change VUs
         run: | 
-           sed 's/4/1/g' ${{github.event.inputs.scriptname}} > ${FILE_NAME}
+           sed 's/4/${{github.event.inputs.vus}}/g' 'timeout${{github.event.inputs.scriptname}} > ${FILE_NAME}
             
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
