@@ -4,7 +4,7 @@ import { Counter, Rate } from "k6/metrics";
 import encoding from "k6/encoding";
 import { group } from 'k6';
 
-const VU = BASIC_VUS;
+const VU = 4;
 const MAX_BATCH_PER_HOST = 5;
 
 let errorRate = new Rate("errors");
