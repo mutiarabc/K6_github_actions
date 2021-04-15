@@ -27,12 +27,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
         
-      - name: Change VUs
+      - name: Checkout basic
+        uses: ./
+        with:
+          ref: k6/basic
+          path: basic
+      - name: Change
+        shell: bash
         run: | 
            sed -i -e 's/VU = 4/VU = ${{github.event.inputs.vus}}/g' -e 's/timeout: 5000/timeout: ${{github.event.inputs.stages}}/g' -e 's/test-api.k6.io/${{github.event.inputs.base_url}}/g' ./k6/${{github.event.inputs.scriptname}}     
            cat ${{github.event.inputs.scriptname}}
+        
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
         with:
             path: |
-            filename: ${{github.event.inputs.scriptname}} 
+            filename: ./k6/${{github.event.inputs.scriptname}} 
