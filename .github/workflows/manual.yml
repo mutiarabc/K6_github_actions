@@ -14,6 +14,10 @@ on:
         description: 'Timeout'
         required: true
         default: '5000'
+      base_url:
+        description: 'URL'
+        required: true
+        default: 'https://'
 
 jobs:
  change-and-run:
@@ -25,9 +29,10 @@ jobs:
 
       - name: Change VUs
         run: | 
-           sed -i -e 's/VU = 4/VU = ${{github.event.inputs.vus}}/g' -e 's/timeout: 5000/timeout: ${{github.event.inputs.stages}}/g' ${{github.event.inputs.scriptname}}     
+           sed -i -e 's/VU = 4/VU = ${{github.event.inputs.vus}}/g' -e 's/timeout: 5000/timeout: ${{github.event.inputs.stages}}/g' -e 's/BASE_URL:  'https://test-api.k6.io/'/BASE_URL:  '${{github.event.inputs.base_url}}'/g'  ${{github.event.inputs.scriptname}}     
            cat ${{github.event.inputs.scriptname}} 
       - name: Run local k6 test with docker
         uses: k6io/action@v0.1
         with:
-            filename : ${{github.event.inputs.scriptname}} 
+            path: | 
+            filename: ${{github.event.inputs.scriptname}} 
