@@ -26,13 +26,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-
-      # Basic checkout
-      - name: Checkout basic
-        uses: ./
-        with:
-          ref: ./k6
-          path: basic
+        
       - name: Change VUs
         run: | 
            sed -i -e 's/VU = 4/VU = ${{github.event.inputs.vus}}/g' -e 's/timeout: 5000/timeout: ${{github.event.inputs.stages}}/g' -e 's/test-api.k6.io/${{github.event.inputs.base_url}}/g' ./k6/${{github.event.inputs.scriptname}}     
