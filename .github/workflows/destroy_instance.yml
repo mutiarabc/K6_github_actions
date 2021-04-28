@@ -12,6 +12,7 @@ on:
 
 jobs:
   destroy:
+    runs-on: ubuntu-latest
     steps:
       - name: Triggered
         run: |
