@@ -1,0 +1,32 @@
+name: Destroy Instance
+on: 
+  workflow_dispatch:
+    # Add KUBE_CONFIG_DATA in secrets
+    inputs:
+      deployment_name:
+        description: 'System Deployment Name'     
+        required: true
+      job_name:
+        description: 'K6 Job Name'
+        required: true
+
+jobs:
+  destroy:
+    steps:
+      - name: Triggered
+        run: |
+          echo "Performing deletion of ${{github.event.inputs.deployment_name}}'s deployment and service + ${{github.event.inputs.job_name}}'s Job "
+      # https://github.com/marketplace/actions/kubernetes-cli-kubectl
+      # - name: Delete Deployment and Service
+      #   uses: steebchen/kubectl@master
+      #   env:
+      #     KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      #   with:
+      #     args: delete deployments/${{github.event.inputs.deployment_name}} services/${{github.event.inputs.deployment_name}}-svc
+
+      # - name: Delete Job
+      #   uses: steebchen/kubectl@master
+      #   env:
+      #     KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      #   with:
+      #     args: delete job/${{github.event.inputs.job_name}}
