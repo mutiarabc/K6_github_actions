@@ -27,13 +27,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
         
-      - name: Change script
-        run: | 
-           sed -i -e 's/VU = 4/VU = ${{github.event.inputs.vus}}/g' -e 's/timeout: 5000/timeout: ${{github.event.inputs.stages}}/g' -e 's/test-api.k6.io/${{github.event.inputs.base_url}}/g' ${{github.event.inputs.scriptname}}     
-           cat ${{github.event.inputs.scriptname}}
+      - name: Test Kubectl
+        run: kubectl --version && gcloud version
         
-      - name: Run local k6 test with docker
-        uses: k6io/action@v0.1
-        with:
-            path: |
-            filename: ${{github.event.inputs.scriptname}} 
+#       - name: Run local k6 test with docker
+#         uses: k6io/action@v0.1
+#         with:
+#             path: |
+#             filename: ${{github.event.inputs.scriptname}} 
