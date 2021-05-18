@@ -16,7 +16,24 @@ Untuk itu, dibuatlah sebuah alur secara garis besar sebagai berikut:
 
 ## Manual Trigger dari Github
 
-To be added
+Beberapa input berikut dibutuhkan setiap kali melakukan trigger test.
+
+* **test_script_filename**: Test Script Main Filename. Default adalah `main.js`. Dibutuhkan jika ingin memiliki beberapa skenario test.
+* **test_options_filename**: Test Options Filename. Default adalah `load_test.js` yang tersimpan pada `k8s/test/performance/options/`. File akan di copy pada folder `scenario` menjadi `options.js` dan diimport oleh `main.js`.
+* **vu**: (Opsional) Target Virtual Users. Jika dibutuhkan oleh `options.js`.
+* **iteration**: (Opsional) How many times for VU to do their job? Jika dibutuhkan oleh `options.js`.
+* **duration**: (Opsional) How long VU they do their job? Jika dibutuhkan oleh `options.js`.
+
+Ada pun input data lain yang bersifat statis berada pada `env`.
+
+* **SYSTEM_NAME**: Nama sistem ini, akan digunakan untuk mengidentifikasi deployment dan service.
+* **GCP_PROJECT_ID**: GKE Project ID
+* **GCP_SA_KEY**: Service account
+* **USER_REPO**: Organization Name
+* **REPO_NAME**: Repo Name
+* **WORKFLOW_TEARDOWN_FILE_NAME**: Workflow yang akan di trigger untuk melakukan teardown semua instance
+* **GITHUB_USER_API**: User yang merequest ke github API
+* **GITHUB_TOKEN**: Token user diatas
 
 ## Pilih Options
 
@@ -44,11 +61,18 @@ To be added
   * Ramp Down **1/5**
 
 To be added
+<!-- TODO tambahkan mengenai executor dan lainnya
+https://k6.io/docs/using-k6/scenarios/executors/
+-->
+
 
 ## Performance Test Workflow
 
-To be Added
-
+* **Set up Cloud SDK**: Setup google cloud sdk hingga mendapatkan kube config
+* **Deploy System**: Menyesuaikan nama deployment dan service dengan `env` yang telah dituliskan diatas, lalu melakukan `kubectl apply`
+* **Configure Test Script**: Memastikan test script dan options menggunakan file yang telah dimasukan diatas lalu memasukan semua file di folder `scenario` sebagai configmap.
+* **Secret for Test Script**: To be added. Agar test script dapat menggunakan env yang telah dimasukan.
+* **Deploy Test Job**: Menjalankan test script sebagai kubernetes Job.
 
 ## Teardown Function
 
@@ -109,6 +133,7 @@ Perhatikan data yang dikirimkan pada tahap sebelumnya, yang menandakan kita memb
 }
 ```
 
+<!-- TODO Ganti menggunakan kubectl bawaan dan gcloud sdk -->
 Untuk melakukan destroy instance, cukup melakukan `kubectl delete`. Contoh dibawah ini jika menggunakan step dari `steebchen/kubectl@master` digabungkan dengan data inputs yang diberikan pada proses sebelumnya.
 
 ```yml
