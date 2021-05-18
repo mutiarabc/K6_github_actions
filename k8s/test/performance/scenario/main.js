@@ -1,6 +1,7 @@
 import { sleep, group } from "k6";
 import http from "k6/http";
-import { tearingdown } from './misc/teardown.js';
+import { tearingdown } from './teardown.js';
+import { options } from './options.js'
 
 export const options = {};
 

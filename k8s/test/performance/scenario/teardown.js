@@ -4,7 +4,7 @@ import encoding from 'k6/encoding';
 export function tearingdown() {
     const basic_url = 'https://api.github.com'
     // const basic_url = 'http://localhost:8080'
-    const url = basic_url + `/repos/${__ENV.USER_REPO}/${__ENV.REPO_NAME}/actions/workflows/${__ENV.WORKFLOW_FILE_NAME}/dispatches`;
+    const url = basic_url + `/repos/${__ENV.USER_REPO}/${__ENV.REPO_NAME}/actions/workflows/${__ENV.WORKFLOW_TEARDOWN_FILE_NAME}/dispatches`;
 
     const payload = JSON.stringify({
         "ref": "main",
@@ -14,7 +14,7 @@ export function tearingdown() {
         }
     });
 
-    const credentials = `${__ENV.USER_API}:${__ENV.GITHUB_TOKEN}`;
+    const credentials = `${__ENV.GITHUB_USER_API}:${__ENV.GITHUB_TOKEN}`;
     const encodedCredentials = encoding.b64encode(credentials);
     console.log(encodedCredentials)
     const params = {
@@ -27,4 +27,14 @@ export function tearingdown() {
 
     http.post(url, payload, params);
   
+}
+
+export function notifyTelegram() {
+    // https://gitlab.alterra.id/alterra/evans/jellyfish/hedwig/-/blob/master/swagger.yaml
+    // /api/v1/tele/send
+    // {
+    //     "bot_name": "HachiRokuBot",
+    //     "to_group": "GrupBot00,TestBot",
+    //     "message": "Place your message here"
+    // }
 }

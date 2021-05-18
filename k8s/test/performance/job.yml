@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: systemname-performance-test
+spec:
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+    spec:
+      containers:
+      - name: systemname-performance-test
+        image: loadimpact/k6
+        command: ["k6",  "run", "/app/main.js"]
+        volumeMounts:
+        - name: k6-volume
+          mountPath: /app
+      volumes:
+      - name: k6-volume
+        configMap:
+         name: systemname-test-scenario
+      restartPolicy: Never
+  
