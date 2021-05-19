@@ -1,23 +1,48 @@
 name: Self service performance test
+
+env:
+  # Change this
+  ## Test Configuration
+  ### Manual input from github action, see workflow_dispatch below.
+
+  ## Auto deployment
+  SYSTEM_NAME: my_awesome_system # will be use for deployment and service target
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }} 
+
+  ## Auto Teardown
+  USER_REPO: sepulsa
+  REPO_NAME: my_awesome_system_repo
+  WORKFLOW_TEARDOWN_FILE_NAME: destroy_instance.yml
+  
+  ## Credential for calling github API
+  GITHUB_USER_API: ${{ secrets.GITHUB_USER_API }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+  # End for Change
+  
+
 on: 
   workflow_dispatch:
+  # For manual input when trigger the workflow
     inputs:
-      scriptname:
-        description: 'Nama Script'     
+      test_script_filename: 
+        description: 'Test Script Main Filename'     
         required: true
-        default: '.js'
-      vus:
-        description: 'VUS'
+        default: 'main.js'
+      test_options_filename: 
+        description: 'Test Options Filename'     
         required: true
-        default: '1'
-      stages:
-        description: 'Timeout'
-        required: true
-        default: '5000'
-      base_url:
-        description: 'URL'
-        required: true
-        default: 'test-api.k6.io'
+        default: 'load_test.js'
+      vu: 
+        description: 'Target Virtual Users'
+        required: false
+      iteration: 
+        description: 'How many times for VU to do their job?'
+        required: false
+      duration: 
+        description: 'How long VU they do their job?'     
+        required: false
 
 jobs:
  change-and-run:
@@ -27,13 +52,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
         
-      - name: Change script
-        run: | 
-           sed -i -e 's/VU = 4/VU = ${{github.event.inputs.vus}}/g' -e 's/timeout: 5000/timeout: ${{github.event.inputs.stages}}/g' -e 's/test-api.k6.io/${{github.event.inputs.base_url}}/g' ${{github.event.inputs.scriptname}}     
-           cat ${{github.event.inputs.scriptname}}
-        
-      - name: Run local k6 test with docker
-        uses: k6io/action@v0.1
+      - name: Test Kubectl and gcloud
+        run: kubectl version --client && gcloud version
+
+      # TODO get kubeconfig from gcloud
+      # https://github.com/google-github-actions/setup-gcloud/blob/master/example-workflows/gke/README.md
+      # https://github.com/google-github-actions/setup-gcloud/blob/master/example-workflows/gke/.github/workflows/gke.yml
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
         with:
-            path: |
-            filename: ${{github.event.inputs.scriptname}} 
+          project_id: $GCP_PROJECT_ID
+          service_account_key: $GCP_SA_KEY
+          export_default_credentials: true
+
+      # gcloud beta container clusters get-credentials mycluster --region asia-southeast2-c --project myproject
+      # kubectl config use-context gke_myproject_asia-southeast2-c_mycluster
+      # kubectl config set "contexts."`kubectl config current-context`".namespace" mynamespace
+
+      - name: Deploy System
+        # Need more complex example, e.g: with db and initial data
+        run : |
+          sed -e "s/systemname/$SYSTEM_NAME/g" k8s/test/deployment.yml | \
+          kubectl apply -f -
+
+      - name: Configure Test Script
+        run : |
+          [ "${{github.event.inputs.test_script_filename}}" = "main.js" ] || cp k8s/test/performance/scenario/${{github.event.inputs.test_script_filename}} k8s/test/performance/scenario/main.js \
+          cp k8s/test/performance/options/${{github.event.inputs.test_options_filename}} k8s/test/performance/scenario/options.js \
+          kubectl create configmap $SYSTEM_NAME-test-scenario --from-file=k8s/test/performance/scenario/
+
+      - name: Deploy Test Job
+        # TODO how to add environment variable to this job?
+        # Maybe using secret https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables
+        run : |
+          sed -e "s/systemname/$SYSTEM_NAME/g" k8s/test/performance/job.yml | \
+          kubectl apply -f -
